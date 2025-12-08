@@ -27,9 +27,31 @@ const navItems = [
 ];
 
 export default function PartnerLayout({ children }: { children: ReactNode }) {
-  usePartnerAuthGuard();
   const pathname = usePathname();
+
+  const authRoutes = [
+    "/partner/login",
+    "/partner/register",
+    "/partner/forgot-password",
+    "/partner/register/otp",
+    "/partner/rejected",
+  ];
+
+  const isAuthRoute = authRoutes.includes(pathname ?? "");
+
+  if (!isAuthRoute) {
+    usePartnerAuthGuard();
+  }
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  if (isAuthRoute) {
+    // Standalone auth layout without dashboard chrome
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-slate-100">
