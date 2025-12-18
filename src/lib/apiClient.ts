@@ -48,7 +48,18 @@ apiClient.interceptors.response.use(
     const status = error?.response?.status;
     if (status === 401 && typeof window !== "undefined") {
       setPartnerToken(null);
-      window.location.href = "/partner/login";
+
+      const path = window.location.pathname || "";
+      const isAuthRoute =
+        path.startsWith("/partner/login") ||
+        path.startsWith("/partner/register") ||
+        path.startsWith("/partner/onboarding") ||
+        path.startsWith("/partner/forgot-password");
+
+      // Avoid infinite refresh loops when already on an auth route
+      if (!isAuthRoute) {
+        window.location.href = "/partner/login";
+      }
     }
     return Promise.reject(error);
   }

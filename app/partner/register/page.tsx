@@ -64,10 +64,10 @@ export default function PartnerRegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-slate-900 via-slate-950 to-black px-4 py-8">
-      <div className="w-full max-w-md space-y-6 rounded-3xl border border-white/5 bg-white/95 p-6 shadow-2xl shadow-slate-900/60 backdrop-blur">
+    <div className="flex min-h-screen items-center justify-center bg-[#f3f6fb] px-4 py-8">
+      <div className="w-full max-w-md space-y-6 rounded-3xl border border-slate-100 bg-white p-6 shadow-xl">
         <div className="space-y-1 text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-teal-500">
             Impact Club
           </p>
           <h1 className="text-lg font-semibold text-slate-900">Partner registration</h1>
@@ -97,7 +97,7 @@ export default function PartnerRegisterPage() {
               <input
                 type="file"
                 accept="image/*"
-                className="w-full rounded-md border px-3 py-1.5 text-xs file:mr-2 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-white hover:file:bg-slate-800"
+                className="w-full rounded-md border px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400"
                 onChange={(e) => {
                   const file = e.target.files?.[0] ?? null;
                   setAvatarFile(file);
@@ -121,7 +121,7 @@ export default function PartnerRegisterPage() {
               <input
                 type="text"
                 required
-                className="w-full rounded-md border px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-inner focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/60"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
@@ -222,7 +222,7 @@ export default function PartnerRegisterPage() {
           <button
             type="submit"
             disabled={registerMutation.isPending}
-            className="flex w-full items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center rounded-full bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
           >
             {registerMutation.isPending ? "Submitting..." : "Register as partner"}
           </button>

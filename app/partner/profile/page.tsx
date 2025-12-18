@@ -6,12 +6,14 @@ import {
   useUpdatePartnerPassword,
   useUpdatePartnerProfile,
 } from "@/hooks/usePartnerProfile";
+import { usePartnerLogin } from "@/hooks/usePartnerAuth";
 import { uploadPartnerAvatar } from "@/services/partner/uploads";
 
 export default function PartnerProfilePage() {
   const { data: profile, isLoading } = usePartnerProfile();
   const updateProfile = useUpdatePartnerProfile();
   const updatePassword = useUpdatePartnerPassword();
+  const { logout, loggingOut } = usePartnerLogin();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -59,10 +61,10 @@ export default function PartnerProfilePage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-5xl space-y-5 pb-10">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-lg font-semibold text-black">Profile & settings</h1>
+          <h1 className="text-xl font-semibold text-slate-900">Profile & settings</h1>
           <p className="text-sm text-slate-500">Manage your personal details, security, and notifications.</p>
         </div>
       </div>
@@ -70,7 +72,7 @@ export default function PartnerProfilePage() {
       {isLoading && <div className="text-sm text-slate-500">Loading profile...</div>}
 
       <div className="grid gap-4 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.2fr)]">
-        <div className="space-y-4 rounded-xl border bg-white p-4 md:p-6">
+        <div className="space-y-4 rounded-3xl border border-slate-100 bg-white/95 p-4 shadow-md md:p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-sm font-semibold text-black">Partner details</h2>
@@ -81,7 +83,7 @@ export default function PartnerProfilePage() {
             {!editingProfile && (
               <button
                 type="button"
-                className="rounded-md border px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+                className="inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm hover:bg-slate-50"
                 onClick={() => setEditingProfile(true)}
               >
                 Edit profile
@@ -89,8 +91,8 @@ export default function PartnerProfilePage() {
             )}
           </div>
 
-          <div className="mt-3 flex items-center gap-4 border-b pb-4">
-            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-xs font-semibold text-slate-700">
+          <div className="mt-3 flex items-center gap-4 border-b border-slate-100 pb-4">
+            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-xs font-semibold text-slate-700 shadow-sm">
               {avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={avatar} alt={profile?.name || "Avatar"} className="h-full w-full object-cover" />
@@ -102,7 +104,7 @@ export default function PartnerProfilePage() {
               <div className="text-sm font-semibold text-slate-900">Display picture</div>
               <div className="flex items-center gap-2 text-xs text-slate-500">
                 <span>Update your profile image shown across the portal.</span>
-                <label className="inline-flex cursor-pointer items-center rounded-md border px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50">
+                <label className="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 shadow-sm hover:bg-slate-50">
                   <span>Change photo</span>
                   <input
                     type="file"
@@ -121,7 +123,7 @@ export default function PartnerProfilePage() {
                 <div className="text-[11px] font-medium uppercase tracking-wide text-slate-500">
                   Name
                 </div>
-                <div className="rounded-md border bg-slate-50 px-3 py-2 text-slate-900">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900">
                   {profile?.name || "—"}
                 </div>
               </div>
@@ -145,7 +147,7 @@ export default function PartnerProfilePage() {
                 <div className="text-[11px] font-medium uppercase tracking-wide text-slate-500">
                   Avatar URL
                 </div>
-                <div className="rounded-md border bg-slate-50 px-3 py-2 text-slate-900 break-all">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 break-all">
                   {profile?.avatar || "—"}
                 </div>
               </div>
@@ -169,7 +171,7 @@ export default function PartnerProfilePage() {
                 <div className="text-[11px] font-medium uppercase tracking-wide text-slate-500">
                   Joined
                 </div>
-                <div className="rounded-md border bg-slate-50 px-3 py-2 text-xs text-slate-800">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-800">
                   {profile?.createdAt
                     ? new Date(profile.createdAt).toLocaleString()
                     : "—"}
@@ -184,7 +186,7 @@ export default function PartnerProfilePage() {
                 <label className="text-sm font-medium text-black">Name</label>
                 <input
                   type="text"
-                  className="w-full rounded-md border px-3 py-2 text-sm text-slate-900"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-inner focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/60"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -194,7 +196,7 @@ export default function PartnerProfilePage() {
                 <label className="text-sm font-medium text-black">Email</label>
                 <input
                   type="email"
-                  className="w-full rounded-md border px-3 py-2 text-sm text-slate-900"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-inner focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/60"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -204,7 +206,7 @@ export default function PartnerProfilePage() {
                 <label className="text-sm font-medium text-black">Phone</label>
                 <input
                   type="tel"
-                  className="w-full rounded-md border px-3 py-2 text-sm text-slate-900"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-inner focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/60"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -214,7 +216,7 @@ export default function PartnerProfilePage() {
                 <label className="text-sm font-medium text-black">Avatar URL</label>
                 <input
                   type="url"
-                  className="w-full rounded-md border px-3 py-2 text-sm text-slate-900"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-inner focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/60"
                   value={avatar}
                   onChange={(e) => setAvatar(e.target.value)}
                 />
@@ -223,7 +225,7 @@ export default function PartnerProfilePage() {
               <div className="flex justify-end gap-2 pt-1">
                 <button
                   type="button"
-                  className="rounded-md border px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                  className="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
                   onClick={() => {
                     if (profile) {
                       setName(profile.name ?? "");
@@ -239,7 +241,7 @@ export default function PartnerProfilePage() {
                 <button
                   type="submit"
                   disabled={updateProfile.isPending}
-                  className="rounded-md bg-slate-900 px-4 py-2 text-xs font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {updateProfile.isPending ? "Saving..." : "Save changes"}
                 </button>
@@ -250,7 +252,7 @@ export default function PartnerProfilePage() {
         <div className="space-y-4">
           <form
             onSubmit={handlePasswordSubmit}
-            className="space-y-4 rounded-xl border bg-white p-4 md:p-6"
+            className="space-y-4 rounded-3xl border border-slate-100 bg-white/95 p-4 shadow-md md:p-6"
           >
             <h2 className="text-sm font-semibold text-black">Update password</h2>
 
@@ -258,7 +260,7 @@ export default function PartnerProfilePage() {
               <label className="text-sm font-medium text-black">Current password</label>
               <input
                 type="password"
-                className="w-full rounded-md border px-3 py-2 text-sm text-slate-900"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-inner focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/60"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
@@ -268,7 +270,7 @@ export default function PartnerProfilePage() {
               <label className="text-sm font-medium text-black">New password</label>
               <input
                 type="password"
-                className="w-full rounded-md border px-3 py-2 text-sm text-slate-900"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-inner focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/60"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
@@ -278,14 +280,14 @@ export default function PartnerProfilePage() {
               <button
                 type="submit"
                 disabled={updatePassword.isPending}
-                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {updatePassword.isPending ? "Updating..." : "Update password"}
               </button>
             </div>
           </form>
 
-          <div className="space-y-4 rounded-xl border bg-white p-4 md:p-6">
+          <div className="space-y-4 rounded-3xl border border-slate-100 bg-white/95 p-4 shadow-md md:p-6">
             <h2 className="text-sm font-semibold text-black">Notification settings</h2>
             <p className="text-xs text-slate-500">
               Choose how you want to receive updates about your courses, events, and earnings.
@@ -318,6 +320,23 @@ export default function PartnerProfilePage() {
                   onChange={(e) => setInAppNotifications(e.target.checked)}
                 />
               </label>
+            </div>
+          </div>
+
+          <div className="space-y-3 rounded-3xl border border-rose-50 bg-rose-50/80 p-4 text-sm text-rose-900 shadow-md md:p-6">
+            <h2 className="text-sm font-semibold text-rose-900">Sign out</h2>
+            <p className="text-xs text-rose-700/90">
+              Log out of your partner workspace on this device. You can sign back in anytime with your phone and password.
+            </p>
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => logout()}
+                disabled={loggingOut}
+                className="inline-flex items-center rounded-full bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-rose-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {loggingOut ? "Signing out..." : "Log out"}
+              </button>
             </div>
           </div>
         </div>

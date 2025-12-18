@@ -24,6 +24,9 @@ export function usePartnerNotifications(initialQuery?: PartnerNotificationsQuery
   >({
     queryKey: ["partner-notifications", query],
     queryFn: () => getPartnerNotifications(query),
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   return { data, isLoading, isError, error, refetch, query, setQuery };

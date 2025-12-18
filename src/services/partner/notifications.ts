@@ -12,18 +12,18 @@ export async function getPartnerNotifications(
 ): Promise<PaginatedResponse<PartnerNotification>> {
   const res = await apiClient.get<
     ResponseWrapper<PaginatedResponse<PartnerNotification>>
-  >("/api/v1/partner/notifications", { params });
+  >("/api/v1/notifications", { params });
   return res.data.data;
 }
 
 export async function markNotificationAsRead(id: string): Promise<void> {
-  await apiClient.post(`/api/v1/partner/notifications/${id}/read`);
+  await apiClient.patch(`/api/v1/notifications/${id}/read`);
 }
 
 export async function markNotificationAsUnread(id: string): Promise<void> {
-  await apiClient.post(`/api/v1/partner/notifications/${id}/unread`);
+  await apiClient.post(`/api/v1/notifications/${id}/unread`);
 }
 
 export async function markAllNotificationsAsRead(): Promise<void> {
-  await apiClient.post("/api/v1/partner/notifications/read-all");
+  await apiClient.patch("/api/v1/notifications/read-all");
 }

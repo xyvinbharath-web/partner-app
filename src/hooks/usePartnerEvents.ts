@@ -26,6 +26,9 @@ export function usePartnerEvents(initialQuery?: PartnerEventsQuery) {
   >({
     queryKey: ["partner-events", query],
     queryFn: () => getPartnerEvents(query),
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   return {
